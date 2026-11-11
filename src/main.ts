@@ -3,6 +3,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module.js';
 import { DatabaseExceptionFilter } from './common/filters/database-exception.filter.js';
+import { TransformInterceptor } from './common/interceptors/transform.interceptor.js';
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule);
@@ -16,6 +17,9 @@ async function bootstrap(): Promise<void> {
     }),
   );
   app.useGlobalFilters(new DatabaseExceptionFilter());
+  
+  // Daftarkan interceptor secara global di sini:
+  app.useGlobalInterceptors(new TransformInterceptor());
 
   const port = Number(process.env.PORT ?? 3000);
   await app.listen(port);

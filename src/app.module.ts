@@ -1,5 +1,5 @@
-import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
@@ -36,7 +36,5 @@ import { WarehousesModule } from './warehouses/warehouses.module.js';
     WarehousesModule,
     ProductsModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}
