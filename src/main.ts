@@ -1,9 +1,12 @@
+import 'reflect-metadata';
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module.js';
+import { DatabaseExceptionFilter } from './common/filters/database-exception.filter.js';
 
-async function bootstrap() {
+async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule);
+
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -12,6 +15,12 @@ async function bootstrap() {
       transformOptions: { enableImplicitConversion: true },
     }),
   );
-  await app.listen(process.env.PORT ?? 3000);
+  app.useGlobalFilters(new DatabaseExceptionFilter());
+
+  const port = Number(process.env.PORT ?? 3000);
+  await app.listen(port);
+
+  console.log(`Inventory Management API berjalan di http://localhost:${port}`);
 }
-await bootstrap();
+
+void bootstrap();
