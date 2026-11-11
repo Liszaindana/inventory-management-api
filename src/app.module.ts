@@ -9,6 +9,7 @@ import { WarehousesModule } from './warehouses/warehouses.module.js';
 import { ProductsModule } from './products/products.module.js';
 import { StockMovementsModule } from './stock-movements/stock-movements.module.js';
 import { StockMovementItemsModule } from './stock-movement-items/stock-movement-items.module.js';
+import { WarehousesModule } from './warehouses/warehouses.module.js';
 
 @Module({
   imports: [
