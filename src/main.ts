@@ -12,11 +12,12 @@ async function bootstrap(): Promise<void> {
       whitelist: true,
       forbidNonWhitelisted: true,
       transform: true,
+      transformOptions: { enableImplicitConversion: true },
     }),
   );
   app.useGlobalFilters(new DatabaseExceptionFilter());
 
-  const port = Number(process.env.PORT ?? 3001);
+  const port = Number(process.env.PORT ?? 3000);
   await app.listen(port);
 
   console.log(`Inventory Management API berjalan di http://localhost:${port}`);

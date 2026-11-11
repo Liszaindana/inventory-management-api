@@ -1,8 +1,15 @@
-import { Column, DeleteDateColumn, Entity } from 'typeorm';
-import { AppBaseEntity } from '../common/entities/base.entity.js';
+import {
+  Column,
+  DeleteDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+} from 'typeorm';
+import { BaseEntity } from '../../common/entities/base.entity.js';
+import { Supplier } from '../../suppliers/entities/supplier.entity.js';
 
 @Entity('products')
-export class Product extends AppBaseEntity {
+export class Product extends BaseEntity {
   @Column({ type: 'varchar', length: 50, unique: true })
   sku: string;
 
@@ -35,6 +42,13 @@ export class Product extends AppBaseEntity {
 
   @Column({ type: 'uuid', nullable: true })
   supplierId: string | null;
+
+  @ManyToOne(() => Supplier, (supplier) => supplier.products, {
+    nullable: true,
+    onDelete: 'SET NULL',
+  })
+  @JoinColumn({ name: 'supplierId' })
+  supplier: Supplier | null;
 
   @DeleteDateColumn({ type: 'timestamptz', nullable: true })
   deletedAt: Date | null;
