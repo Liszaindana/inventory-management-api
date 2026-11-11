@@ -6,6 +6,7 @@ import { AppService } from './app.service.js';
 import { ProductsModule } from './products/products.module.js';
 import { SuppliersModule } from './suppliers/suppliers.module.js';
 import { WarehousesModule } from './warehouses/warehouses.module.js';
+import { CategoriesModule } from './categories/categories.module.js';
 
 // Modul Categories, StockMovements, dan StockMovementItems belum ada di branch
 // ini. Import-nya tidak disertakan agar aplikasi tetap bisa di-build. Modul
@@ -35,6 +36,7 @@ import { WarehousesModule } from './warehouses/warehouses.module.js';
     SuppliersModule,
     WarehousesModule,
     ProductsModule,
+    CategoriesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
