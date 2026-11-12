@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { StockService } from '../stock/stock.service.js';
 import { CreateProductDto } from './dto/create-product.dto.js';
 import { UpdateProductDto } from './dto/update-product.dto.js';
 import { Product } from './entities/product.entity.js';
@@ -10,16 +11,21 @@ export class ProductsService {
   constructor(
     @InjectRepository(Product)
     private readonly productRepository: Repository<Product>,
+    private readonly stockService: StockService,
   ) {}
 
   findAll(): Promise<Product[]> {
     return this.productRepository.find({
+      relations: { category: true, supplier: true },
       order: { name: 'ASC' },
     });
   }
 
   async findOne(id: string): Promise<Product> {
-    const product = await this.productRepository.findOneBy({ id });
+    const product = await this.productRepository.findOne({
+      where: { id },
+      relations: { category: true, supplier: true },
+    });
 
     if (!product) {
       throw new NotFoundException(`Produk dengan id ${id} tidak ditemukan`);
@@ -52,6 +58,26 @@ export class ProductsService {
     return {
       message: 'Produk berhasil dihapus',
       id,
+    };
+  }
+
+  async getStock(id: string) {
+    const product = await this.findOne(id);
+    const warehouses = await this.stockService.getWarehouseStock(product.id);
+    const totalStock = warehouses.reduce(
+      (total, warehouse) => total + warehouse.stock,
+      0,
+    );
+
+    return {
+      productId: product.id,
+      sku: product.sku,
+      name: product.name,
+      unit: product.unit,
+      minStock: product.minStock,
+      totalStock,
+      isLowStock: totalStock <= product.minStock,
+      warehouses,
     };
   }
 }

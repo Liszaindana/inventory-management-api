@@ -4,8 +4,11 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
 } from 'typeorm';
+import { Category } from '../../categories/entities/category.entity.js';
 import { BaseEntity } from '../../common/entities/base.entity.js';
+import { StockMovementItem } from '../../stock-movement-items/entities/stock-movement-item.entity.js';
 import { Supplier } from '../../suppliers/entities/supplier.entity.js';
 
 @Entity('products')
@@ -40,16 +43,26 @@ export class Product extends BaseEntity {
   @Column({ type: 'uuid', nullable: true })
   categoryId: string | null;
 
+  @ManyToOne(() => Category, (category) => category.products, {
+    nullable: true,
+    onDelete: 'RESTRICT',
+  })
+  @JoinColumn({ name: 'categoryId' })
+  category: Category | null;
+
   @Column({ type: 'uuid', nullable: true })
   supplierId: string | null;
 
   @ManyToOne(() => Supplier, (supplier) => supplier.products, {
     nullable: true,
-    onDelete: 'SET NULL',
+    onDelete: 'RESTRICT',
   })
   @JoinColumn({ name: 'supplierId' })
   supplier: Supplier | null;
 
   @DeleteDateColumn({ type: 'timestamptz', nullable: true })
   deletedAt: Date | null;
+
+  @OneToMany(() => StockMovementItem, (item) => item.product)
+  stockMovementItems: StockMovementItem[];
 }
