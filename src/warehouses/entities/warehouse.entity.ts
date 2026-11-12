@@ -1,10 +1,12 @@
 import {
-  Entity,
-  PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { StockMovement } from '../../stock-movements/entities/stock-movement.entity.js';
 
 @Entity('warehouses')
 export class Warehouse {
@@ -28,4 +30,7 @@ export class Warehouse {
 
   @UpdateDateColumn({ type: 'timestamp' })
   updatedAt: Date;
+
+  @OneToMany(() => StockMovement, (movement) => movement.warehouse)
+  stockMovements: StockMovement[];
 }

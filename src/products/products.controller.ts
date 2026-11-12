@@ -26,6 +26,11 @@ export class ProductsController {
     return this.productsService.create(dto);
   }
 
+  @Get(':id/stock')
+  getStock(@Param('id', ParseUUIDPipe) id: string) {
+    return this.productsService.getStock(id);
+  }
+
   @Get(':id')
   findOne(@Param('id', ParseUUIDPipe) id: string) {
     return this.productsService.findOne(id);
